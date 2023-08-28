@@ -85,11 +85,11 @@ const masterTemplateSchema = new mongoose.Schema({
     },
     supportive_id: {
       type: String,
-      required: true
+      default: ""
     },
     status: {
       type: Boolean,
-      required: true
+      default: true
     }
   }],
 
@@ -108,11 +108,11 @@ const masterTemplateSchema = new mongoose.Schema({
     },
     supportive_id: {
       type: String,
-      required: true
+      default: ""
     },
     status: {
       type: Boolean,
-      required: true
+      default: true
     }
   }],
   
@@ -137,6 +137,23 @@ const masterTemplateSchema = new mongoose.Schema({
       type: Boolean,
       required: true
     }
+  }],
+
+  projectSolution: [{
+    name: {
+      type: String,
+      required: true
+    },
+    allActions: [{
+      action: {
+        type: String,
+        required: true
+      },
+      api: {
+        type: String,
+        required: true
+      }
+    }]
   }]
 });
 

@@ -6,7 +6,7 @@ const { projectIndustry, allProjectIndustry, projectIndustryById, updateProjectI
 const { projectPhase, allProjectPhase, projectPhaseById, updateProjectPhase, deleteProjectPhase } = require('../controller/adminController/masterController/projectPhaseController');
 const { projectModule, allProjectModule, projectModuleById, updateProjectModule, deleteProjectModule } = require('../controller/adminController/masterController/projectModuleController');
 const { projectTask, allProjectTask, projectTaskById, updateProjectTask, deleteProjectTask } = require('../controller/adminController/masterController/projectTaskController');
-
+const  projectSolutionController  = require('../controller/adminController/masterController/projectSolutionController')
 
 //Routes for CRUD Operations in Project Type
 router.post('/api/admin/master/project_type',projectType)   //to add project_type
@@ -78,6 +78,10 @@ router.get('/api/admin/master/project_task/:id', projectTaskById); // to get one
 router.patch('/api/admin/master/project_task/:id', updateProjectTask); // to update one project_task by its id
 
 router.delete('/api/admin/master/project_task/:id', deleteProjectTask); // to delete one project_task by its id
+
+//Routes for CRUD Operations in Project Solution
+router.post('/api/admin/master/project_solution', projectSolutionController.storeSolution);
+router.get('/api/admin/master/project_solution', projectSolutionController.getAllSolutions);
 
 
 module.exports = router;
