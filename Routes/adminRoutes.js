@@ -82,6 +82,9 @@ router.delete('/api/admin/master/project_task/:id', deleteProjectTask); // to de
 //Routes for CRUD Operations in Project Solution
 router.post('/api/admin/master/project_solution', projectSolutionController.storeSolution);
 router.get('/api/admin/master/project_solution', projectSolutionController.getAllSolutions);
+router.get('/api/admin/master/project_solution/:id', projectSolutionController.getSolutionByID);
+router.patch('/api/admin/master/project_solution/:id', projectSolutionController.updateSolution);
+router.delete('/api/admin/master/project_solution/:id', projectSolutionController.deleteSolution);
 
 
 module.exports = router;
