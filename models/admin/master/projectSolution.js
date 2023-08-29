@@ -15,7 +15,15 @@ const solutionSchema = new Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    status: {
+        type: Boolean,
+        required: true
+    },
+    solution_admin_id: {
+        type: String,
+        required: true
+    }
 })
 
 module.exports = mongoose.model('ProjectSolution', solutionSchema, 'solutions');
