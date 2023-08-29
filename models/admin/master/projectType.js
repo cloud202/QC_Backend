@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const industrySchema = new Schema({
+const typeSchema = new Schema({
     type_name: {
         type: String,
         required: true
@@ -17,7 +17,11 @@ const industrySchema = new Schema({
     type_status: {
         type: Boolean,
         required: true
+    },
+    type_admin: {
+        type: String,
+        required: true
     }
 })
 
-module.exports = mongoose.model('ProjectIndustry',industrySchema, 'industries');
+module.exports = mongoose.model('ProjectType', typeSchema, 'types');
