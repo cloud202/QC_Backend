@@ -2,19 +2,19 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const typeSchema = new Schema({
-    type_name: {
+    name: {
         type: String,
         required: true
     },
-    type_description: {
+    description: {
         type: String,
         required: true
     },
-    type_scope: {
+    scope: {
         type: String,
         required: true
     },
-    type_status: {
+    status: {
         type: Boolean,
         required: true
     },
