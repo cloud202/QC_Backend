@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(adminRoutes);
 app.use('/api', userRoutes);
 app.use('/api', templateRoutes);
-// app.use(errorHandler);
+app.use(errorHandler);
 // console.log(process.env.PORT);
 app.listen(port, () => {
     console.log(`Connected to port ${port}`);
