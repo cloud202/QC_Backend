@@ -5,7 +5,7 @@ const { projectSegment,allProjectSegment, projectSegmentById, updateProjectSegme
 const { projectIndustry, allProjectIndustry, projectIndustryById, updateProjectIndustry, deleteProjectIndustry } = require('../controller/adminController/masterController/projectIndustryController');
 const { projectPhase, allProjectPhase, projectPhaseById, updateProjectPhase, deleteProjectPhase } = require('../controller/adminController/masterController/projectPhaseController');
 const { projectModule, allProjectModule, projectModuleById, updateProjectModule, deleteProjectModule } = require('../controller/adminController/masterController/projectModuleController');
-const { projectTask, allProjectTask, projectTaskById, updateProjectTask, deleteProjectTask } = require('../controller/adminController/masterController/projectTaskController');
+const projectTaskController = require('../controller/adminController/masterController/projectTaskController');
 const  projectSolutionController  = require('../controller/adminController/masterController/projectSolutionController')
 
 //Routes for CRUD Operations in Project Type
@@ -69,15 +69,15 @@ router.delete('/api/admin/master/project_module/:id', deleteProjectModule); // t
 
 
 // Routes for CRUD operations in Project Task
-router.post('/api/admin/master/project_task', projectTask); // to add project_task
+router.post('/api/admin/master/project_task', projectTaskController.storeTask); // to add project_task
 
-router.get('/api/admin/master/project_task', allProjectTask); // to get all project_tasks
+router.get('/api/admin/master/project_task', projectTaskController.getAllTasks); // to get all project_tasks
 
-router.get('/api/admin/master/project_task/:id', projectTaskById); // to get one project_task by its id
+router.get('/api/admin/master/project_task/:id', projectTaskController.getTaskById); // to get one project_task by its id
 
-router.patch('/api/admin/master/project_task/:id', updateProjectTask); // to update one project_task by its id
+router.patch('/api/admin/master/project_task/:id', projectTaskController.updateTask); // to update one project_task by its id
 
-router.delete('/api/admin/master/project_task/:id', deleteProjectTask); // to delete one project_task by its id
+router.delete('/api/admin/master/project_task/:id', projectTaskController.deleteTask); // to delete one project_task by its id
 
 //Routes for CRUD Operations in Project Solution
 router.post('/api/admin/master/project_solution', projectSolutionController.storeSolution);
