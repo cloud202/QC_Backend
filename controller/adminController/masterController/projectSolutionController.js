@@ -1,5 +1,6 @@
 const ProjectSolution = require('../../../models/admin/master/projectSolution');
 const masterSolutionSchema = require('../../../Validators/masterSolutionValidator')
+const CustomErrorHandler = require("../../../services/CustomErrorHandler");
 
 const projectSolutionController = {
     async storeSolution(req, res, next) {
@@ -18,14 +19,10 @@ const projectSolutionController = {
 
     async getAllSolutions(req, res, next) {
         try {
-            let masterTemplate = await MasterTemplate.findOne();
-            if (!masterTemplate) {
-                masterTemplate = await MasterTemplate.create({});
-            }
-            const allSolutions = await masterTemplate.projectSolution;
+            const allSolutions = await ProjectSolution.find();
             return res.status(200).json(allSolutions);
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return next(error);
         }
     },
 
@@ -33,61 +30,38 @@ const projectSolutionController = {
         try {
             const { error } = masterSolutionSchema.validate(req.body);
             if (error) {
-                return res.status(422).json({ message: error.message });
+                return next(error);
             }
-            let masterTemplate = await MasterTemplate.findOne();
-            if (!masterTemplate) {
-                return res.status(404).json({ error: 'MasterTemplate not found.' });
-            }
-            const _id = req.params.id;
-            const oldSolution = await masterTemplate.projectSolution.id(_id);
-            if (!oldSolution) {
-                return res.status(404).json({ error: 'Solution not found.' });
-            }
-            oldSolution.name = req.body.name;
-            oldSolution.allActions = req.body.allActions;
-            const updatedTemplate = await masterTemplate.save();
-            const updatedSolution = updatedTemplate.projectSolution.id(_id);
-            return res.json({ message: "Solution updated", updatedSolution: updatedSolution });
+            const solutionId = req.params.id;
+            const updatedSolution = await ProjectSolution.findOneAndUpdate({ _id: solutionId }, { ...req.body }, { new: true });
+            return res.status(200).json(updatedSolution);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return next(error);
         }
     },
 
     async deleteSolution(req, res, next) {
         try {
-            let masterTemplate = await MasterTemplate.findOne();
-            if (!masterTemplate) {
-                return res.status(404).json({ error: 'MasterTemplate not found.' });
-            }
-            const _id = req.params.id;
-            const indexToRemove = masterTemplate.projectSolution.findIndex(type => type._id.toString() === _id);
-            if (indexToRemove === -1) {
-                return res.status(404).json({ error: 'Project solution not found.' });
-            }
-            const removedSolution = masterTemplate.projectSolution[indexToRemove];
-            masterTemplate.projectSolution.splice(indexToRemove, 1);
-            const updatedTemplate = await masterTemplate.save();
-            res.json({ message: "Project Solution removed", removedSolution: removedSolution });
+            const solutionId = req.params.id;
+            const removedSolution = await ProjectSolution.findByIdAndDelete({ _id: solutionId });
+            if (removedSolution)
+                return res.status(200).json(removedSolution);
+            return res.status(204).json(removedSolution);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return next(error);
         }
     },
 
     async getSolutionByID(req, res, next) {
         try {
-            let masterTemplate = await MasterTemplate.findOne();
-            if (!masterTemplate) {
-                return res.status(404).json({ error: 'MasterTemplate not found.' });
+            const solutionId = req.params.id;
+            const solution = await ProjectSolution.findById(solutionId);
+            if (!solution) {
+                return next(CustomErrorHandler.notFound('Solution not found'));
             }
-            const _id = req.params.id;
-            const projectSolution = masterTemplate.projectSolution.find(type => type._id.toString() === _id);
-            if (!projectSolution) {
-                return res.status(404).json({ error: 'Project solution not found.' });
-            }
-            res.json(projectSolution);
+            return res.status(200).json(solution);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return next(error);
         }
     }
 }
