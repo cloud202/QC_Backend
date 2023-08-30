@@ -1,4 +1,4 @@
-const MasterTemplate = require('../../../models/admin/master/masterTemplate');
+const ProjectSolution = require('../../../models/admin/master/projectSolution');
 const masterSolutionSchema = require('../../../Validators/masterSolutionValidator')
 
 const projectSolutionController = {
@@ -6,19 +6,13 @@ const projectSolutionController = {
         try {
             const { error } = masterSolutionSchema.validate(req.body);
             if (error) {
-                return res.status(422).json({ message: error.message });
+                return next(error);
             }
-            const newSolution = { ...req.body };
-            let masterTemplate = await MasterTemplate.findOne();
-            if (!masterTemplate) {
-                masterTemplate = await MasterTemplate.create({});
-            }
-            masterTemplate.projectSolution.push(newSolution);
-            const savedTemplate = await masterTemplate.save();
-            const savedSolution = savedTemplate.projectSolution[savedTemplate.projectSolution.length - 1];
+            const newSolution = new ProjectSolution({ ...req.body });
+            const savedSolution = await newSolution.save();
             return res.status(200).json(savedSolution);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return next(error);
         }
     },
 

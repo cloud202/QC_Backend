@@ -18,12 +18,12 @@ const solutionSchema = new Schema({
     }],
     status: {
         type: Boolean,
-        required: true
+        default: true
     },
     solution_admin_id: {
         type: String,
-        required: true
+        default: 'defaultid'
     }
 })
-
 module.exports = mongoose.model('ProjectSolution', solutionSchema, 'solutions');
+// module.exports = ProjectSolution;
