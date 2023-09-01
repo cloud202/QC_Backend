@@ -20,7 +20,8 @@ const typeSchema = new Schema({
     },
     type_admin: {
         type: String,
-        required: true
+        default: 'default',
+        // required: true
     }
 })
 

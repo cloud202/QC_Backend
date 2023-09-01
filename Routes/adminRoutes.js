@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const { projectType, allProjectType, deleteProjectType, updateProjectType, projectTypeById } = require('../controller/adminController/masterController/projectTypeController');
+const projectTypeController = require('../controller/adminController/masterController/projectTypeController');
 const projectSegmentController = require('../controller/adminController/masterController/projectSegmentController');
 const projectIndustryController = require('../controller/adminController/masterController/projectIndustryController');
 const projectPhasecontroller = require('../controller/adminController/masterController/projectPhaseController');
@@ -9,15 +9,11 @@ const projectTaskController = require('../controller/adminController/masterContr
 const projectSolutionController = require('../controller/adminController/masterController/projectSolutionController')
 
 //Routes for CRUD Operations in Project Type
-router.post('/api/admin/master/project_type', projectType)   //to add project_type
-
-router.get('/api/admin/master/project_type', allProjectType) //to get all project_type
-
-router.get('/api/admin/master/project_type/:id', projectTypeById)    //to get one project_type by its id
-
-router.patch('/api/admin/master/project_type/:id', updateProjectType)    //to update a project_type by its id
-
-router.delete('/api/admin/master/project_type/:id', deleteProjectType)   //to delete a project_type by its id
+router.post('/api/admin/master/project_type', projectTypeController.storeType)   //to add project_type
+router.get('/api/admin/master/project_type', projectTypeController.getAllTypes) //to get all project_type
+router.get('/api/admin/master/project_type/:id', projectTypeController.getTypeByID)    //to get one project_type by its id
+router.patch('/api/admin/master/project_type/:id', projectTypeController.updateType)    //to update a project_type by its id
+router.delete('/api/admin/master/project_type/:id', projectTypeController.deleteType)   //to delete a project_type by its id
 
 
 //Routes for CRUD operations in Project Segment
