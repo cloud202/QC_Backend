@@ -1,132 +1,68 @@
-const MasterTemplate = require("../../../models/admin/master/masterTemplate");
+const ProjectPhase = require('../../../models/admin/master/projectPhase');
+const masterPhaseSchema = require('../../../Validators/masterPhaseValidator');
+const CustomErrorHandler = require('../../../services/CustomErrorHandler');
 
-const projectPhase = async (req, res) => {
-  try {
-    const { name, description, scope, supportive_id, status } = req.body;
-
-    let masterTemplate = await MasterTemplate.findOne();
-
-    if (!masterTemplate) {
-      masterTemplate = await MasterTemplate.create({});
+const projectPhasecontroller = {
+  async storePhase(req, res, next) {
+    try {
+      const { error } = masterPhaseSchema.validate(req.body);
+      if (error) {
+        return next(error);
+      }
+      const newPhase = new ProjectPhase({ ...req.body });
+      const savedPhase = await newPhase.save();
+      return res.status(200).json(savedPhase);
+    } catch (error) {
+      return next(error);
     }
+  },
 
-    const newProjectPhase = {
-      name,
-      description,
-      scope,
-      supportive_id,
-      status,
-    };
-
-    masterTemplate.projectPhase.push(newProjectPhase);
-    const updatedTemplate = await masterTemplate.save();
-
-    // Get the last item in the projectModule array (which is the newly added one)
-    const savedPhase = updatedTemplate.projectPhase[updatedTemplate.projectPhase.length - 1];
-
-    res.status(201).json(savedPhase);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const allProjectPhase = async (req, res) => {
-  try {
-    let masterTemplate = await MasterTemplate.findOne();
-    if (!masterTemplate) {
-      res.status(404).json({ error: "Master template is not created yet" });
+  async getAllPhases(req, res, next) {
+    try {
+      const allPhases = await ProjectPhase.find();
+      return res.status(200).json(allPhases);
+    } catch (error) {
+      return next(error);
     }
+  },
 
-    let allProjectPhases = masterTemplate.projectPhase;
-    if (!allProjectPhases) {
-      res.status(404).json({ error: "Master template does not have project phases yet" });
+  async updatePhase(req, res, next) {
+    try {
+      const { error } = masterPhaseSchema.validate(req.body);
+      if (error) {
+        return next(error);
+      }
+      const phaseId = req.params.id;
+      const updatedPhase = await ProjectPhase.findOneAndUpdate({ _id: phaseId }, { ...req.body }, { new: true })
+      if (!updatedPhase) {
+        return next(CustomErrorHandler.notFound('Phase not found'));
+      }
+      return res.status(200).json(updatedPhase);
+    } catch (error) {
+      return next(error);
     }
+  },
 
-    res.status(200).json(allProjectPhases);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const projectPhaseById = async (req, res) => {
-  try {
-    const temp_id = req.params.id;
-
-    let masterTemplate = await MasterTemplate.findOne();
-
-    if (!masterTemplate) {
-      return res.status(404).json({ error: "MasterTemplate not found." });
+  async deletePhase(req, res, next) {
+    try {
+      const phaseId = req.params.id;
+      const removedPhase = await ProjectPhase.findByIdAndDelete({ _id: phaseId });
+      if (removedPhase)
+        return res.status(200).json(removedPhase);
+      return res.status(204).json(removedPhase);
+    } catch (error) {
+      return next(error);
     }
+  },
 
-    const projectPhase = masterTemplate.projectPhase.find(phase => phase._id.toString() === temp_id);
-
-    if (!projectPhase) {
-      return res.status(404).json({ error: "Project phase not found." });
+  async getPhaseByID(req, res, next) {
+    const phaseId = req.params.id;
+    const phase = await ProjectPhase.findById(phaseId);
+    if (!phase) {
+      return next(CustomErrorHandler.notFound('Phase not found'));
     }
+    return res.status(200).json(phase);
+  },
+}
 
-    res.status(200).json(projectPhase);
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const deleteProjectPhase = async (req, res) => {
-  try {
-    const temp_id = req.params.id;
-
-    let masterTemplate = await MasterTemplate.findOne();
-
-    if (!masterTemplate) {
-      return res.status(404).json({ error: "MasterTemplate not found." });
-    }
-
-    const indexToRemove = masterTemplate.projectPhase.findIndex(phase => phase._id.toString() === temp_id);
-
-    if (indexToRemove === -1) {
-      return res.status(404).json({ error: "Project phase not found." });
-    }
-
-    masterTemplate.projectPhase.splice(indexToRemove, 1);
-    const updatedTemplate = await masterTemplate.save();
-
-    res.status(200).json({ message: "Project phase removed", updatedProjectPhase: updatedTemplate.projectPhase });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const updateProjectPhase = async (req, res) => {
-  try {
-    const temp_id = req.params.id;
-    const { name, description, scope, supportive_id, status } = req.body;
-
-    let masterTemplate = await MasterTemplate.findOne();
-
-    if (!masterTemplate) {
-      return res.status(404).json({ error: "MasterTemplate not found." });
-    }
-
-    const projectPhaseToUpdate = masterTemplate.projectPhase.id(temp_id);
-
-    if (!projectPhaseToUpdate) {
-      return res.status(404).json({ error: "Project phase not found." });
-    }
-
-    projectPhaseToUpdate.name = name;
-    projectPhaseToUpdate.description = description;
-    projectPhaseToUpdate.scope = scope;
-    projectPhaseToUpdate.supportive_id = supportive_id;
-    projectPhaseToUpdate.status = status;
-
-    const updatedTemplate = await masterTemplate.save();
-
-    res.status(200).json({ message: "Project phase updated", updatedProjectPhase: projectPhaseToUpdate });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-module.exports = { projectPhase, projectPhaseById, allProjectPhase, deleteProjectPhase, updateProjectPhase };
+module.exports = projectPhasecontroller;

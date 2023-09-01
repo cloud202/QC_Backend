@@ -20,7 +20,8 @@ const moduleSchema = new Schema({
     },
     module_admin_id: {
         type: String,
-        required: true
+        default: 'default'
+        // required: true
     }
 })
 

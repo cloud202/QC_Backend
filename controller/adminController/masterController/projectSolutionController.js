@@ -34,6 +34,9 @@ const projectSolutionController = {
             }
             const solutionId = req.params.id;
             const updatedSolution = await ProjectSolution.findOneAndUpdate({ _id: solutionId }, { ...req.body }, { new: true });
+            if (!updatedSolution) {
+                return next(CustomErrorHandler.notFound('Solution not found'));
+            }
             return res.status(200).json(updatedSolution);
         } catch (error) {
             return next(error);
