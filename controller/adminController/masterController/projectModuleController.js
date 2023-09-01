@@ -34,6 +34,9 @@ const projectModuleController = {
       }
       const moduleId = req.params.id;
       const updatedModule = await ProjectModule.findOneAndUpdate({ _id: moduleId }, { ...req.body }, { new: true })
+      if (!updatedModule) {
+        return next(CustomErrorHandler.notFound('Module not found'));
+      }
       return res.status(200).json(updatedModule);
     } catch (error) {
       return next(error);
