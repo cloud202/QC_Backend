@@ -4,7 +4,7 @@ const { projectType, allProjectType, deleteProjectType, updateProjectType, proje
 const { projectSegment, allProjectSegment, projectSegmentById, updateProjectSegment, deleteProjectSegment } = require('../controller/adminController/masterController/projectSegmentController');
 const projectIndustryController = require('../controller/adminController/masterController/projectIndustryController');
 const { projectPhase, allProjectPhase, projectPhaseById, updateProjectPhase, deleteProjectPhase } = require('../controller/adminController/masterController/projectPhaseController');
-const { projectModule, allProjectModule, projectModuleById, updateProjectModule, deleteProjectModule } = require('../controller/adminController/masterController/projectModuleController');
+const projectModuleController = require('../controller/adminController/masterController/projectModuleController');
 const projectTaskController = require('../controller/adminController/masterController/projectTaskController');
 const projectSolutionController = require('../controller/adminController/masterController/projectSolutionController')
 
@@ -34,13 +34,9 @@ router.delete('/api/admin/master/project_segment/:id', deleteProjectSegment)  //
 
 // Routes for CRUD operations in Project Industry
 router.post('/api/admin/master/project_industry', projectIndustryController.storeIndustry); // to add project_industry
-
 router.get('/api/admin/master/project_industry', projectIndustryController.getAllIndustries); // to get all project_industry
-
 router.get('/api/admin/master/project_industry/:id', projectIndustryController.getIndustryByID); // to get one project_industry by its id
-
 router.patch('/api/admin/master/project_industry/:id', projectIndustryController.updateIndustry); // to update one project_industry by its id
-
 router.delete('/api/admin/master/project_industry/:id', projectIndustryController.deleteIndustry); // to delete one project_industry by its id
 
 
@@ -57,26 +53,17 @@ router.delete('/api/admin/master/project_phase/:id', deleteProjectPhase); // to 
 
 
 // Routes for CRUD operations in Project Module
-router.post('/api/admin/master/project_module', projectModule); // to add project_module
-
-router.get('/api/admin/master/project_module', allProjectModule); // to get all project_module
-
-router.get('/api/admin/master/project_module/:id', projectModuleById); // to get one project_module by its id
-
-router.patch('/api/admin/master/project_module/:id', updateProjectModule); // to update one project_module by its id
-
-router.delete('/api/admin/master/project_module/:id', deleteProjectModule); // to delete one project_module by its id
-
+router.post('/api/admin/master/project_module', projectModuleController.storeModule); // to add project_module
+router.get('/api/admin/master/project_module', projectModuleController.getAllModules); // to get all project_module
+router.get('/api/admin/master/project_module/:id', projectModuleController.getModuleByID); // to get one project_module by its id
+router.patch('/api/admin/master/project_module/:id', projectModuleController.updateModule); // to update one project_module by its id
+router.delete('/api/admin/master/project_module/:id', projectModuleController.deleteModule); // to delete one project_module by its id
 
 // Routes for CRUD operations in Project Task
 router.post('/api/admin/master/project_task', projectTaskController.storeTask); // to add project_task
-
 router.get('/api/admin/master/project_task', projectTaskController.getAllTasks); // to get all project_tasks
-
 router.get('/api/admin/master/project_task/:id', projectTaskController.getTaskById); // to get one project_task by its id
-
 router.patch('/api/admin/master/project_task/:id', projectTaskController.updateTask); // to update one project_task by its id
-
 router.delete('/api/admin/master/project_task/:id', projectTaskController.deleteTask); // to delete one project_task by its id
 
 //Routes for CRUD Operations in Project Solution
@@ -85,6 +72,5 @@ router.get('/api/admin/master/project_solution', projectSolutionController.getAl
 router.get('/api/admin/master/project_solution/:id', projectSolutionController.getSolutionByID);
 router.patch('/api/admin/master/project_solution/:id', projectSolutionController.updateSolution);
 router.delete('/api/admin/master/project_solution/:id', projectSolutionController.deleteSolution);
-
 
 module.exports = router;
