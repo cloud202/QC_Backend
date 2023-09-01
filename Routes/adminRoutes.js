@@ -3,7 +3,7 @@ const router = express.Router()
 const { projectType, allProjectType, deleteProjectType, updateProjectType, projectTypeById } = require('../controller/adminController/masterController/projectTypeController');
 const { projectSegment, allProjectSegment, projectSegmentById, updateProjectSegment, deleteProjectSegment } = require('../controller/adminController/masterController/projectSegmentController');
 const projectIndustryController = require('../controller/adminController/masterController/projectIndustryController');
-const { projectPhase, allProjectPhase, projectPhaseById, updateProjectPhase, deleteProjectPhase } = require('../controller/adminController/masterController/projectPhaseController');
+const projectPhasecontroller = require('../controller/adminController/masterController/projectPhaseController');
 const projectModuleController = require('../controller/adminController/masterController/projectModuleController');
 const projectTaskController = require('../controller/adminController/masterController/projectTaskController');
 const projectSolutionController = require('../controller/adminController/masterController/projectSolutionController')
@@ -41,15 +41,11 @@ router.delete('/api/admin/master/project_industry/:id', projectIndustryControlle
 
 
 // Routes for CRUD operations in Project Phase
-router.post('/api/admin/master/project_phase', projectPhase); // to add project_phase
-
-router.get('/api/admin/master/project_phase', allProjectPhase); // to get all project_phases
-
-router.get('/api/admin/master/project_phase/:id', projectPhaseById); // to get one project_phase by its id
-
-router.patch('/api/admin/master/project_phase/:id', updateProjectPhase); // to update one project_phase by its id
-
-router.delete('/api/admin/master/project_phase/:id', deleteProjectPhase); // to delete one project_phase by its id
+router.post('/api/admin/master/project_phase', projectPhasecontroller.storePhase); // to add project_phase
+router.get('/api/admin/master/project_phase', projectPhasecontroller.getAllPhases); // to get all project_phases
+router.get('/api/admin/master/project_phase/:id', projectPhasecontroller.getPhaseByID); // to get one project_phase by its id
+router.patch('/api/admin/master/project_phase/:id', projectPhasecontroller.updatePhase); // to update one project_phase by its id
+router.delete('/api/admin/master/project_phase/:id', projectPhasecontroller.deletePhase); // to delete one project_phase by its id
 
 
 // Routes for CRUD operations in Project Module
