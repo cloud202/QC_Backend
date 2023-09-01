@@ -20,7 +20,8 @@ const industrySchema = new Schema({
     },
     industry_admin_id: {
         type: String,
-        required: true
+        default: 'default',
+        // required: true
     }
 })
 
