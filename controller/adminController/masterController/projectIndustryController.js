@@ -33,6 +33,9 @@ const projectIndustryController = {
       }
       const industryId = req.params.id;
       const updatedIndustry = await ProjectIndustry.findOneAndUpdate({ _id: industryId }, { ...req.body }, { new: true })
+      if (!updatedIndustry) {
+        return next(CustomErrorHandler.notFound('Industry not found'));
+      }
       return res.status(200).json(updatedIndustry);
     } catch (error) {
       return next(error);
