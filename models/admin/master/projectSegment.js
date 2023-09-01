@@ -20,7 +20,8 @@ const segmentSchema = new Schema({
     },
     segment_admin_id: {
         type: String,
-        required: true
+        default: 'default'
+        // required: true
     }
 })
 

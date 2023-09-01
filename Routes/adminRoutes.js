@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router()
 const { projectType, allProjectType, deleteProjectType, updateProjectType, projectTypeById } = require('../controller/adminController/masterController/projectTypeController');
-const { projectSegment, allProjectSegment, projectSegmentById, updateProjectSegment, deleteProjectSegment } = require('../controller/adminController/masterController/projectSegmentController');
+const projectSegmentController = require('../controller/adminController/masterController/projectSegmentController');
 const projectIndustryController = require('../controller/adminController/masterController/projectIndustryController');
 const projectPhasecontroller = require('../controller/adminController/masterController/projectPhaseController');
 const projectModuleController = require('../controller/adminController/masterController/projectModuleController');
@@ -21,15 +21,11 @@ router.delete('/api/admin/master/project_type/:id', deleteProjectType)   //to de
 
 
 //Routes for CRUD operations in Project Segment
-router.post('/api/admin/master/project_segment', projectSegment)  //to add project_segment
-
-router.get('/api/admin/master/project_segment', allProjectSegment)  //to get all project_segment
-
-router.get('/api/admin/master/project_segment/:id', projectSegmentById)  //to get one project_segment by its id
-
-router.patch('/api/admin/master/project_segment/:id', updateProjectSegment)  //to get one project_segment by its id
-
-router.delete('/api/admin/master/project_segment/:id', deleteProjectSegment)  //to get one project_segment by its id
+router.post('/api/admin/master/project_segment', projectSegmentController.storeSegment)  //to add project_segment
+router.get('/api/admin/master/project_segment', projectSegmentController.getAllSegments)  //to get all project_segment
+router.get('/api/admin/master/project_segment/:id', projectSegmentController.getSegmentByID)  //to get one project_segment by its id
+router.patch('/api/admin/master/project_segment/:id', projectSegmentController.updateSegment)  //to get one project_segment by its id
+router.delete('/api/admin/master/project_segment/:id', projectSegmentController.deleteSegment)  //to get one project_segment by its id
 
 
 // Routes for CRUD operations in Project Industry
