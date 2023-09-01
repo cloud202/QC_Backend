@@ -47,6 +47,9 @@ const projectTaskController = {
       }
       const taskId = req.params.id;
       const updatedTask = await ProjectTask.findOneAndUpdate({ _id: taskId }, { ...req.body }, { new: true });
+      if (!updatedTask) {
+        return next(CustomErrorHandler.notFound('Task not found'));
+      }
       return res.status(200).json(updatedTask);
     } catch (error) {
       return next(error);
