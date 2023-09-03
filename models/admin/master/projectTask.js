@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-// const ProjectSolution = require('./projectSolution');
+const ProjectSolution = require('./projectSolution');
 
 const taskSchema = new Schema({
     name: {
@@ -26,7 +26,7 @@ const taskSchema = new Schema({
     },
     task_solutionid: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "ProjectSolution"
+        ref: 'ProjectSolution'
     },
     task_actionName: {
         type: String,

@@ -1,4 +1,5 @@
 const ProjectTask = require("../../../models/admin/master/projectTask");
+const ProjectSolution = require("../../../models/admin/master/projectSolution");
 const masterSolutionSchema = require("../../../Validators/masterTaskValidator");
 const CustomErrorHandler = require("../../../services/CustomErrorHandler");
 
@@ -19,7 +20,7 @@ const projectTaskController = {
 
   async getAllTasks(req, res, next) {
     try {
-      const allTasks = await ProjectTask.find();
+      const allTasks = await ProjectTask.find().populate('task_solutionid');
       return res.status(200).json(allTasks);
     } catch (error) {
       return next(error);
@@ -29,7 +30,7 @@ const projectTaskController = {
   async getTaskById(req, res, next) {
     try {
       const taskId = req.params.id;
-      const task = await ProjectTask.findById(taskId);
+      const task = await ProjectTask.findById(taskId).populate('task_solutionid');
       if (!task) {
         return next(CustomErrorHandler.notFound('Task not found'));
       }
@@ -46,7 +47,7 @@ const projectTaskController = {
         return next(error);
       }
       const taskId = req.params.id;
-      const updatedTask = await ProjectTask.findOneAndUpdate({ _id: taskId }, { ...req.body }, { new: true });
+      const updatedTask = await ProjectTask.findOneAndUpdate({ _id: taskId }, { ...req.body }, { new: true }).populate('task_solutionid');
       if (!updatedTask) {
         return next(CustomErrorHandler.notFound('Task not found'));
       }
@@ -59,7 +60,7 @@ const projectTaskController = {
   async deleteTask(req, res, next) {
     try {
       const taskId = req.params.id;
-      const removedtask = await ProjectTask.findByIdAndDelete({ _id: taskId });
+      const removedtask = await ProjectTask.findByIdAndDelete({ _id: taskId }).populate('task_solutionid');
       if (removedtask)
         return res.status(200).json(removedtask);
       return res.status(204).json(removedtask);
