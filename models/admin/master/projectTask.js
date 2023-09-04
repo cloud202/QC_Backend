@@ -13,11 +13,9 @@ const taskSchema = new Schema({
     },
     task_admin_id: {
         type: String,
-        required: true
     },
     task_id: {
         type: String,
-        required: true,
         unique: true
     },
     task_type: {

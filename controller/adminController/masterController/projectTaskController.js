@@ -11,6 +11,9 @@ const projectTaskController = {
         return next(error);
       }
       const newTask = new ProjectTask({ ...req.body });
+      let lastSavedTask = await ProjectTask.findOne({}, {}, { sort: { task_id: -1 } });
+      newTaskIdNumber = lastSavedTask ? parseInt(lastSavedTask.task_id.slice(6)) + 1: 1;
+      newTask.task_id = 'QC_TS_' + newTaskIdNumber;
       const savedtask = await newTask.save();
       return res.status(201).json(savedtask);
     } catch (error) {
@@ -67,7 +70,9 @@ const projectTaskController = {
     } catch (error) {
       return next(error);
     }
-  }
+  },
+
+
 };
 
 
