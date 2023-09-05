@@ -8,8 +8,8 @@ const masterTaskSchema = Joi.object({
     task_admin_id: Joi.string(),
     task_type: Joi.string().required(),
     task_solutionid: Joi.objectId().allow(''),
-    task_actionName: Joi.string().required(),
-    task_script: Joi.string().required()
+    task_actionName: Joi.string().allow(''),
+    task_script: Joi.string().allow('')
 });
 
 module.exports = masterTaskSchema;

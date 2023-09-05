@@ -28,11 +28,9 @@ const taskSchema = new Schema({
     },
     task_actionName: {
         type: String,
-        required: true,
     },
     task_script: {
         type: String,
-        required: true,
     }
 },{ timestamps: true })
 
