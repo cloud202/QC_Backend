@@ -1,5 +1,4 @@
 const ProjectTask = require("../../../models/admin/master/projectTask");
-const ProjectSolution = require("../../../models/admin/master/projectSolution");
 const masterSolutionSchema = require("../../../Validators/masterTaskValidator");
 const CustomErrorHandler = require("../../../services/CustomErrorHandler");
 
@@ -52,6 +51,10 @@ const projectTaskController = {
       const { error } = masterSolutionSchema.validate(req.body);
       if (error) {
         return next(error);
+      }
+      const {task_solutionid} = req.body;
+      if(task_solutionid.length===0){
+        req.body.task_solutionid=null;
       }
       const taskId = req.params.id;
       const updatedTask = await ProjectTask.findOneAndUpdate({ _id: taskId }, { ...req.body }, { new: true }).populate('task_solutionid');
