@@ -7,6 +7,7 @@ const projectPhasecontroller = require('../controller/adminController/masterCont
 const projectModuleController = require('../controller/adminController/masterController/projectModuleController');
 const projectTaskController = require('../controller/adminController/masterController/projectTaskController');
 const projectSolutionController = require('../controller/adminController/masterController/projectSolutionController')
+const projectTemplateController = require('../controller/adminController/masterController/projectTemplateController')
 
 //Routes for CRUD Operations in Project Type
 router.post('/api/admin/master/project_type', projectTypeController.storeType)   //to add project_type
@@ -60,5 +61,8 @@ router.get('/api/admin/master/project_solution', projectSolutionController.getAl
 router.get('/api/admin/master/project_solution/:id', projectSolutionController.getSolutionByID);
 router.patch('/api/admin/master/project_solution/:id', projectSolutionController.updateSolution);
 router.delete('/api/admin/master/project_solution/:id', projectSolutionController.deleteSolution);
+
+//Routes for CRUD opertation in Project Template
+router.post('/api/admin/master/project_template', projectTemplateController.storeTemplate);
 
 module.exports = router;
