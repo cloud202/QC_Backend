@@ -10,6 +10,10 @@ const projectTaskController = {
       if (error) {
         return next(error);
       }
+      const {task_solutionid} = req.body;
+      if(task_solutionid.length===0){
+        req.body.task_solutionid=null;
+      }
       const newTask = new ProjectTask({ ...req.body });
       let lastSavedTask = await ProjectTask.findOne({}, {}, { sort: { task_id: -1 } });
       newTaskIdNumber = lastSavedTask ? parseInt(lastSavedTask.task_id.slice(6)) + 1: 1;
