@@ -15,7 +15,7 @@ const projectTaskController = {
         req.body.task_solutionid=null;
       }
       const newTask = new ProjectTask({ ...req.body });
-      let lastSavedTask = await ProjectTask.findOne({}, {}, { sort: { task_id: -1 } });
+      let lastSavedTask = await ProjectTask.findOne().sort({createdAt: -1});
       newTaskIdNumber = lastSavedTask ? parseInt(lastSavedTask.task_id.slice(6)) + 1: 1;
       newTask.task_id = 'QC_TS_' + newTaskIdNumber;
       const savedtask = await newTask.save();
