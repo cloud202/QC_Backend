@@ -64,5 +64,7 @@ router.delete('/api/admin/master/project_solution/:id', projectSolutionControlle
 
 //Routes for CRUD opertation in Project Template
 router.post('/api/admin/master/project_template', projectTemplateController.storeTemplate);
+router.get('/api/admin/master/project_template', projectTemplateController.getAllTemnplates);
+router.get('/api/admin/master/project_template/:id', projectTemplateController.getTemplateById);
 
 module.exports = router;
