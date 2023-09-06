@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const templateSchema = new Schema({
     project_id: {
-        type: Schema.Types.ObjectId,
+        type: String,
+        unique: true,
         required: true,
     },
     template_name: {
@@ -59,6 +60,6 @@ const templateSchema = new Schema({
             required: true
         }
     }]
-});
+},{timestamps:true});
 
 module.exports = mongoose.model('ProjectTemplate', templateSchema, 'templates');
