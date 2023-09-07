@@ -8,6 +8,7 @@ const projectModuleController = require('../controller/adminController/masterCon
 const projectTaskController = require('../controller/adminController/masterController/projectTaskController');
 const projectSolutionController = require('../controller/adminController/masterController/projectSolutionController')
 const projectTemplateController = require('../controller/adminController/masterController/projectTemplateController')
+const projectTemplateController2 = require('../controller/adminController/masterController/projectTemplateController2')
 
 //Routes for CRUD Operations in Project Type
 router.post('/api/admin/master/project_type', projectTypeController.storeType)   //to add project_type
@@ -63,9 +64,12 @@ router.patch('/api/admin/master/project_solution/:id', projectSolutionController
 router.delete('/api/admin/master/project_solution/:id', projectSolutionController.deleteSolution);
 
 //Routes for CRUD opertation in Project Template
-router.post('/api/admin/master/project_template', projectTemplateController.storeTemplate);
-router.get('/api/admin/master/project_template', projectTemplateController.getAllTemnplates);
-router.get('/api/admin/master/project_template/:id', projectTemplateController.getTemplateById);
-router.delete('/api/admin/master/project_template/:id', projectTemplateController.deleteTemplate);
+router.post('/api/admin/master/v1/project_template', projectTemplateController.storeTemplate);
+router.get('/api/admin/master/v1/project_template', projectTemplateController.getAllTemnplates);
+router.get('/api/admin/master/v1/project_template/:id', projectTemplateController.getTemplateById);
+router.delete('/api/admin/master/v1/project_template/:id', projectTemplateController.deleteTemplate);
+
+//Routes for CRUD opertation in Project Template new version
+router.post('/api/admin/master/v2/project_template', projectTemplateController2.storeTemplate);
 
 module.exports = router;
