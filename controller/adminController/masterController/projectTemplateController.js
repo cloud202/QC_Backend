@@ -1,6 +1,6 @@
 const masterTemplateSchema = require('../../../Validators/masterTemplateValidator');
 const ProjectTemplate = require('../../../models/admin/master/projectTemplate');
-
+const CustomErrorHandler = require("../../../services/CustomErrorHandler");
 const projectTemplateController = {
     async storeTemplate(req, res, next) {
         try {
@@ -10,7 +10,7 @@ const projectTemplateController = {
             }
             const newTemplate = new ProjectTemplate({ ...req.body });
             const lastSavedTemplate = await ProjectTemplate.findOne().sort({ createdAt: -1 });
-            let newProjectId = lastSavedTemplate ? parseInt(lastSavedTemplate.project_id.slice(6)) + 1 : 1;
+            let newProjectId = lastSavedTemplate ? parseInt(lastSavedTemplate.project_id.slice(3)) + 1 : 1;
             newTemplate.project_id = 'QC_' + newProjectId;
             const savedTemplate = await newTemplate.save();
             return res.status(201).send(savedTemplate);
@@ -43,6 +43,7 @@ const projectTemplateController = {
     },
 
     async getTemplateById(req, res, next) {
+
         try {
             const templateId = req.params.id;
             const template = await ProjectTemplate.findById(templateId).populate([{
@@ -57,14 +58,31 @@ const projectTemplateController = {
             }, {
                 path: 'phases.phaseId',
                 model: 'ProjectPhase'
-            },{
+            }, {
                 path: 'modules.moduleId',
                 model: 'ProjectModule'
-            },{
+            }, {
                 path: 'tasks.taskId',
                 model: 'ProjectTask'
             }]);
+            if (!template) {
+                return next(CustomErrorHandler.notFound('Template not found'));
+            }
             return res.status(200).json(template);
+        } catch (error) {
+            return next(error);
+        }
+    },
+
+
+    async deleteTemplate(req, res, next) {
+        try {
+            const templateId = req.params.id;
+            const removedTemplate = await ProjectTemplate.findByIdAndDelete(templateId);
+            if (removedTemplate) {
+                return res.status(200).json(removedTemplate);
+            }
+            return res.status(204).json(removedTemplate);
         } catch (error) {
             return next(error);
         }

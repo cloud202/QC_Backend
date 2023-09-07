@@ -66,5 +66,6 @@ router.delete('/api/admin/master/project_solution/:id', projectSolutionControlle
 router.post('/api/admin/master/project_template', projectTemplateController.storeTemplate);
 router.get('/api/admin/master/project_template', projectTemplateController.getAllTemnplates);
 router.get('/api/admin/master/project_template/:id', projectTemplateController.getTemplateById);
+router.delete('/api/admin/master/project_template/:id', projectTemplateController.deleteTemplate);
 
 module.exports = router;
