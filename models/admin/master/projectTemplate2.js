@@ -49,4 +49,4 @@ const templateSchema = new Schema({
     }]
 }, { timestamps: true });
 
-module.exports = mongoose.model('ProjectTemplate', templateSchema, 'templates');
+module.exports = mongoose.model('ProjectTemplate2', templateSchema, 'templates2');
