@@ -17,6 +17,74 @@ const projectTemplateController2 = {
         } catch (error) {
             return next(error);
         }
+    },
+
+    async getAllTemnplates(req, res, next) {
+        try {
+            const allTemplates = await ProjectTemplate2.find()
+                .populate([{
+                    path: 'template_type_id',
+                    model: 'ProjectType',
+                    select: ['name']
+                }, {
+                    path: 'template_segment_id',
+                    model: 'ProjectSegment',
+                    select: ['name']
+                }, {
+                    path: 'template_industry_id',
+                    model: 'ProjectIndustry',
+                    select: ['name']
+                }])
+                .select('project_id template_name template_type_id template_segment_id template_industry_id');
+            return res.status(200).json(allTemplates);
+        } catch (error) {
+            return next(error);
+        }
+    },
+
+    async getTemplateById(req, res, next) {
+
+        try {
+            const templateId = req.params.id;
+            const template = await ProjectTemplate2.findById(templateId).populate([{
+                path: 'template_type_id',
+                model: 'ProjectType'
+            }, {
+                path: 'template_segment_id',
+                model: 'ProjectSegment'
+            }, {
+                path: 'template_industry_id',
+                model: 'ProjectIndustry'
+            }, {
+                path: 'phases.phasesId',
+                model: 'ProjectPhase'
+            }, {
+                path: 'phases.modules.moduleId',
+                model: 'ProjectModule'
+            }, {
+                path: 'phases.modules.tasks.taskId',
+                model: 'ProjectTask'
+            }]);
+            if (!template) {
+                return next(CustomErrorHandler.notFound('Template not found'));
+            }
+            return res.status(200).json(template);
+        } catch (error) {
+            return next(error);
+        }
+    },
+
+    async deleteTemplate(req, res, next) {
+        try {
+            const templateId = req.params.id;
+            const removedTemplate = await ProjectTemplate2.findByIdAndDelete(templateId);
+            if (removedTemplate) {
+                return res.status(200).json(removedTemplate);
+            }
+            return res.status(204).json(removedTemplate);
+        } catch (error) {
+            return next(error);
+        }
     }
 };
 

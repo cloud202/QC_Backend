@@ -71,5 +71,8 @@ router.delete('/api/admin/master/v1/project_template/:id', projectTemplateContro
 
 //Routes for CRUD opertation in Project Template new version
 router.post('/api/admin/master/v2/project_template', projectTemplateController2.storeTemplate);
+router.get('/api/admin/master/v2/project_template', projectTemplateController2.getAllTemnplates);
+router.get('/api/admin/master/v2/project_template/:id', projectTemplateController2.getTemplateById);
+router.delete('/api/admin/master/v2/project_template/:id', projectTemplateController2.deleteTemplate);
 
 module.exports = router;
