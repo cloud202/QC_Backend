@@ -1,6 +1,7 @@
 const masterTemplateSchema = require('../../../Validators/masterTemplateValidator');
 const ProjectTemplate = require('../../../models/admin/master/projectTemplate');
-const CustomErrorHandler = require("../../../services/CustomErrorHandler");
+
+
 const projectTemplateController = {
     async storeTemplate(req, res, next) {
         try {
@@ -83,6 +84,41 @@ const projectTemplateController = {
                 return res.status(200).json(removedTemplate);
             }
             return res.status(204).json(removedTemplate);
+        } catch (error) {
+            return next(error);
+        }
+    },
+
+    async updateTemplateById(req, res, next) {
+        try {
+            const { error } = masterTemplateSchema.validate(req.body);
+            if (error) {
+                return next(error);
+            }
+            const templateId = req.params.id;
+            const updatedTemplate = await ProjectTemplate.findOneAndUpdate({ _id: templateId }, { ...req.body }, { new: true }).populate([{
+                path: 'template_type_id',
+                model: 'ProjectType'
+            }, {
+                path: 'template_segment_id',
+                model: 'ProjectSegment'
+            }, {
+                path: 'template_industry_id',
+                model: 'ProjectIndustry'
+            }, {
+                path: 'phases.phaseId',
+                model: 'ProjectPhase'
+            }, {
+                path: 'modules.moduleId',
+                model: 'ProjectModule'
+            }, {
+                path: 'tasks.taskId',
+                model: 'ProjectTask'
+            }]);
+            if (!updatedTemplate) {
+                return next(CustomErrorHandler.notFound('Template not found'));
+            }
+            return res.status(200).json(updatedTemplate);
         } catch (error) {
             return next(error);
         }

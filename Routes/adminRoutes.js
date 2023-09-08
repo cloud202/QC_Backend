@@ -68,11 +68,13 @@ router.post('/api/admin/master/v1/project_template', projectTemplateController.s
 router.get('/api/admin/master/v1/project_template', projectTemplateController.getAllTemnplates);
 router.get('/api/admin/master/v1/project_template/:id', projectTemplateController.getTemplateById);
 router.delete('/api/admin/master/v1/project_template/:id', projectTemplateController.deleteTemplate);
+router.patch('/api/admin/master/v1/project_template/:id', projectTemplateController.updateTemplateById);
 
 //Routes for CRUD opertation in Project Template new version
 router.post('/api/admin/master/v2/project_template', projectTemplateController2.storeTemplate);
 router.get('/api/admin/master/v2/project_template', projectTemplateController2.getAllTemnplates);
 router.get('/api/admin/master/v2/project_template/:id', projectTemplateController2.getTemplateById);
 router.delete('/api/admin/master/v2/project_template/:id', projectTemplateController2.deleteTemplate);
+router.patch('/api/admin/master/v2/project_template/:id', projectTemplateController2.updateTemplateById);
 
 module.exports = router;
