@@ -16,16 +16,18 @@ const templateSchema = new Schema({
         ref: "ProjectType",
         required: true,
     },
-    template_segment_id: {
-        type: Schema.Types.ObjectId,
-        ref: "ProjectSegment",
-        required: true,
-    },
-    template_industry_id: {
-        type: Schema.Types.ObjectId,
-        ref: "ProjectIndustry",
-        required: true,
-    },
+    template_segments: [{
+        segment_id: {
+            type: Schema.Types.ObjectId,
+            ref: "ProjectSegment",
+        }
+    }],
+    template_industries: [{
+        industry_id: {
+            type: Schema.Types.ObjectId,
+            ref: "ProjectIndustry",
+        }
+    }],
     template_usecase: {
         type: String,
     },
