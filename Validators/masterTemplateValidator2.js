@@ -19,8 +19,12 @@ const phasesSchema = Joi.object({
 const masterTemplateSchema = Joi.object({
     template_name: Joi.string().required(),
     template_type_id: Joi.objectId().required(),
-    template_segment_id: Joi.objectId().required(),
-    template_industry_id: Joi.objectId().required(),
+    template_segments: Joi.array().items(Joi.object({
+        segment_id: Joi.objectId().required()
+    })).min(1),
+    template_industries: Joi.array().items(Joi.object({
+        industry_id: Joi.objectId().required()
+    })).min(1),
     template_usecase: Joi.string().allow(''),
     phases: Joi.array().items(phasesSchema).min(1)
 });

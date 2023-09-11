@@ -28,11 +28,11 @@ const projectTemplateController2 = {
                     model: 'ProjectType',
                     select: ['name']
                 }, {
-                    path: 'template_segment_id',
+                    path: 'template_segments.segment_id',
                     model: 'ProjectSegment',
                     select: ['name']
                 }, {
-                    path: 'template_industry_id',
+                    path: 'template_industries.industry_id',
                     model: 'ProjectIndustry',
                     select: ['name']
                 }])
@@ -51,11 +51,13 @@ const projectTemplateController2 = {
                 path: 'template_type_id',
                 model: 'ProjectType'
             }, {
-                path: 'template_segment_id',
-                model: 'ProjectSegment'
+                path: 'template_segments.segment_id',
+                model: 'ProjectSegment',
+                select: ['name']
             }, {
-                path: 'template_industry_id',
-                model: 'ProjectIndustry'
+                path: 'template_industries.industry_id',
+                model: 'ProjectIndustry',
+                select: ['name']
             }, {
                 path: 'phases.phasesId',
                 model: 'ProjectPhase'
