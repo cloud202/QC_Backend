@@ -9,6 +9,7 @@ const projectTaskController = require('../controller/adminController/masterContr
 const projectSolutionController = require('../controller/adminController/masterController/projectSolutionController')
 const projectTemplateController = require('../controller/adminController/masterController/projectTemplateController')
 const projectTemplateController2 = require('../controller/adminController/masterController/projectTemplateController2')
+const adminUserController = require('../controller/adminController/adminUserController')
 
 //Routes for CRUD Operations in Project Type
 router.post('/api/admin/master/project_type', projectTypeController.storeType)   //to add project_type
@@ -76,5 +77,13 @@ router.get('/api/admin/master/v2/project_template', projectTemplateController2.g
 router.get('/api/admin/master/v2/project_template/:id', projectTemplateController2.getTemplateById);
 router.delete('/api/admin/master/v2/project_template/:id', projectTemplateController2.deleteTemplate);
 router.patch('/api/admin/master/v2/project_template/:id', projectTemplateController2.updateTemplateById);
+
+//routes for CRUD operations for admin user
+router.post('/api/admin/user',adminUserController.storeUser);
+router.get('/api/admin/user',adminUserController.getAllUsers);
+router.get('/api/admin/user/:id',adminUserController.getUserById);
+router.patch('/api/admin/user/:id',adminUserController.updateUser);
+router.delete('/api/admin/user/:id',adminUserController.deleteUser);
+router.get('/api/admin/user/email/:email',adminUserController.getUserByEmail);
 
 module.exports = router;
