@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const ProjectSolution = require('./projectSolution');
 
 const taskSchema = new Schema({
     name: {

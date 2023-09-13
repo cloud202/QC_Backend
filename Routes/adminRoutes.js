@@ -9,7 +9,7 @@ const projectTaskController = require('../controller/adminController/masterContr
 const projectSolutionController = require('../controller/adminController/masterController/projectSolutionController')
 const projectTemplateController = require('../controller/adminController/masterController/projectTemplateController')
 const projectTemplateController2 = require('../controller/adminController/masterController/projectTemplateController2')
-const adminUserController = require('../controller/adminController/adminUserController')
+const adminUserController = require('../controller/adminController/masterController/adminUserController')
 
 //Routes for CRUD Operations in Project Type
 router.post('/api/admin/master/project_type', projectTypeController.storeType)   //to add project_type

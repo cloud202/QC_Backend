@@ -1,6 +1,6 @@
-const adminUserSchema = require('../../Validators/adminUserValidator');
-const AdminUser = require('../../models/admin/adminUser')
-const CustomErrorHandler = require('../../services/CustomErrorHandler');
+const adminUserSchema = require('../../../Validators/adminUserValidator');
+const AdminUser = require('../../../models/admin/adminUser')
+const CustomErrorHandler = require('../../../services/CustomErrorHandler');
 
 const adminUserController = {
     async storeUser(req, res, next) {
@@ -70,9 +70,14 @@ const adminUserController = {
 
     async getUserByEmail(req, res, next) {
         const userEmail = req.params.email;
-        const user = await AdminUser.find({ admin_email: userEmail });
+        let user = await AdminUser.findOne({ admin_email: userEmail });
         if (!user) {
-            return next(CustomErrorHandler.notFound('User not found'));
+            user = new AdminUser({ admin_email: userEmail });
+            const lastSavedUser = await AdminUser.findOne().sort({ createdAt: -1 });
+            let newAdminId = lastSavedUser ? parseInt(lastSavedUser.admin_id.slice(3)) + 1 : 1;
+            user.admin_id = 'QC_' + newAdminId;
+            user = await user.save();
+            return res.status(201).json(user);
         }
         return res.status(200).json(user);
     },

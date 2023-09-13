@@ -66,7 +66,11 @@ const projectTemplateController2 = {
                 model: 'ProjectModule'
             }, {
                 path: 'phases.modules.tasks.taskId',
-                model: 'ProjectTask'
+                model: 'ProjectTask',
+                populate: {
+                    path: 'task_solutionid',
+                    model: 'ProjectSolution'
+                }
             }]);
             if (!template) {
                 return next(CustomErrorHandler.notFound('Template not found'));
@@ -101,11 +105,13 @@ const projectTemplateController2 = {
                 path: 'template_type_id',
                 model: 'ProjectType'
             }, {
-                path: 'template_segment_id',
-                model: 'ProjectSegment'
+                path: 'template_segments.segment_id',
+                model: 'ProjectSegment',
+                select: ['name']
             }, {
-                path: 'template_industry_id',
-                model: 'ProjectIndustry'
+                path: 'template_industries.industry_id',
+                model: 'ProjectIndustry',
+                select: ['name']
             }, {
                 path: 'phases.phasesId',
                 model: 'ProjectPhase'
@@ -114,7 +120,11 @@ const projectTemplateController2 = {
                 model: 'ProjectModule'
             }, {
                 path: 'phases.modules.tasks.taskId',
-                model: 'ProjectTask'
+                model: 'ProjectTask',
+                populate: {
+                    path: 'task_solutionid',
+                    model: 'ProjectSolution'
+                }
             }]);
             if (!updatedTemplate) {
                 return next(CustomErrorHandler.notFound('Template not found'));
