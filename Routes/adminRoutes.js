@@ -11,6 +11,7 @@ const projectTemplateController = require('../controller/adminController/masterC
 const projectTemplateController2 = require('../controller/adminController/masterController/projectTemplateController2');
 const teckStackController = require('../controller/adminController/masterController/teckStackController');
 const adminUserController = require('../controller/adminController/masterController/adminUserController');
+const workloadTypeController = require('../controller/adminController/masterController/workloadTypeController');
 
 //Routes for CRUD Operations in Project Type
 router.post('/api/admin/master/project_type', projectTypeController.storeType)   //to add project_type
@@ -93,5 +94,12 @@ router.get('/api/admin/master/teck_stack', teckStackController.getAllTechStacks)
 router.get('/api/admin/master/teck_stack/:id', teckStackController.getTeckStackById);
 router.patch('/api/admin/master/teck_stack/:id', teckStackController.updateTeckStack);
 router.delete('/api/admin/master/teck_stack/:id', teckStackController.deleteTeckStack);
+
+//routes for CRUD operations for application workload type
+router.post('/api/admin/master/workload_type', workloadTypeController.storeWorkloadType);
+router.get('/api/admin/master/workload_type', workloadTypeController.getAllWorkloadTypes);
+router.get('/api/admin/master/workload_type/:id', workloadTypeController.getWorkloadTypeById);
+router.patch('/api/admin/master/workload_type/:id', workloadTypeController.updateWorkloadType);
+router.delete('/api/admin/master/workload_type/:id', workloadTypeController.deleteWorkloadType);
 
 module.exports = router;

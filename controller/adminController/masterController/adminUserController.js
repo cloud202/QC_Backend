@@ -49,7 +49,7 @@ const adminUserController = {
     async deleteUser(req, res, next) {
         try {
             const userId = req.params.id;
-            const deletedUser = await AdminUser.findOneAndDelete(userId);
+            const deletedUser = await AdminUser.findByIdAndDelete(userId);
             if (deletedUser) {
                 return res.status(200).json(deletedUser);
             }
