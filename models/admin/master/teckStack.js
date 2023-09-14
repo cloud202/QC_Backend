@@ -1,4 +1,3 @@
-const { boolean } = require('joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -10,18 +9,19 @@ const teckStackSchema = new Schema({
     },
     teckstack_description: {
         type: String,
-        default: 'default_name',
+        default: 'default_description',
         required: true
     },
     teckstack_status: {
-        type: boolean,
+        type: Boolean,
         default: true,
         required: true
     },
     teckstack_adminId: {
         type: String,
+        unique: true,
         required: true
     },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('TeckStack', teckStackSchema, 'teckStacks');
