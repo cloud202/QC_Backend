@@ -55,12 +55,16 @@ const projectTypeController = {
   },
 
   async getTypeByID(req, res, next) {
-    const typeId = req.params.id;
-    const type = await ProjectType.findById(typeId);
-    if (!type) {
-      return next(CustomErrorHandler.notFound('Type not found'));
+    try {
+      const typeId = req.params.id;
+      const type = await ProjectType.findById(typeId);
+      if (!type) {
+        return next(CustomErrorHandler.notFound('Type not found'));
+      }
+      return res.status(200).json(type);
+    } catch (error) {
+      return next(error);
     }
-    return res.status(200).json(type);
   },
 }
 
