@@ -55,12 +55,16 @@ const projectIndustryController = {
   },
 
   async getIndustryByID(req, res, next) {
-    const industryId = req.params.id;
-    const industry = await ProjectIndustry.findById(industryId);
-    if (!industry) {
-      return next(CustomErrorHandler.notFound('Industry not found'));
+    try {
+      const industryId = req.params.id;
+      const industry = await ProjectIndustry.findById(industryId);
+      if (!industry) {
+        return next(CustomErrorHandler.notFound('Industry not found'));
+      }
+      return res.status(200).json(industry);  
+    } catch (error) {
+      return next(error);
     }
-    return res.status(200).json(industry);
   },
 }
 

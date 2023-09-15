@@ -55,12 +55,16 @@ const projectSegmentController = {
   },
 
   async getSegmentByID(req, res, next) {
-    const segmentId = req.params.id;
-    const segment = await ProjectSegment.findById(segmentId);
-    if (!segment) {
-      return next(CustomErrorHandler.notFound('Segment not found'));
+    try {
+      const segmentId = req.params.id;
+      const segment = await ProjectSegment.findById(segmentId);
+      if (!segment) {
+        return next(CustomErrorHandler.notFound('Segment not found'));
+      }
+      return res.status(200).json(segment);
+    } catch (error) {
+      return next(error);
     }
-    return res.status(200).json(segment);
   },
 }
 

@@ -56,12 +56,16 @@ const projectModuleController = {
   },
 
   async getModuleByID(req, res, next) {
-    const moduleId = req.params.id;
-    const module = await ProjectModule.findById(moduleId);
-    if (!module) {
-      return next(CustomErrorHandler.notFound('Module not found'));
+    try {
+      const moduleId = req.params.id;
+      const module = await ProjectModule.findById(moduleId);
+      if (!module) {
+        return next(CustomErrorHandler.notFound('Module not found'));
+      }
+      return res.status(200).json(module);
+    } catch (error) {
+      return next(error);
     }
-    return res.status(200).json(module);
   },
 }
 

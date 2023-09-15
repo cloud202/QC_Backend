@@ -56,12 +56,16 @@ const projectPhasecontroller = {
   },
 
   async getPhaseByID(req, res, next) {
-    const phaseId = req.params.id;
-    const phase = await ProjectPhase.findById(phaseId);
-    if (!phase) {
-      return next(CustomErrorHandler.notFound('Phase not found'));
+    try {
+      const phaseId = req.params.id;
+      const phase = await ProjectPhase.findById(phaseId);
+      if (!phase) {
+        return next(CustomErrorHandler.notFound('Phase not found'));
+      }
+      return res.status(200).json(phase);
+    } catch (error) {
+      return next(error);
     }
-    return res.status(200).json(phase);
   },
 }
 

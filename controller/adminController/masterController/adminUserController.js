@@ -60,26 +60,34 @@ const adminUserController = {
     },
 
     async getUserById(req, res, next) {
-        const userId = req.params.id;
-        const user = await AdminUser.findById(userId);
-        if (!user) {
-            return next(CustomErrorHandler.notFound('User not found'));
+        try {
+            const userId = req.params.id;
+            const user = await AdminUser.findById(userId);
+            if (!user) {
+                return next(CustomErrorHandler.notFound('User not found'));
+            }
+            return res.status(200).json(user);
+        } catch (error) {
+            return next(error);
         }
-        return res.status(200).json(user);
     },
 
     async getUserByEmail(req, res, next) {
-        const userEmail = req.params.email;
-        let user = await AdminUser.findOne({ admin_email: userEmail });
-        if (!user) {
-            user = new AdminUser({ admin_email: userEmail });
-            const lastSavedUser = await AdminUser.findOne().sort({ createdAt: -1 });
-            let newAdminId = lastSavedUser ? parseInt(lastSavedUser.admin_id.slice(3)) + 1 : 1;
-            user.admin_id = 'QC_' + newAdminId;
-            user = await user.save();
-            return res.status(201).json(user);
+        try {
+            const userEmail = req.params.email;
+            let user = await AdminUser.findOne({ admin_email: userEmail });
+            if (!user) {
+                user = new AdminUser({ admin_email: userEmail });
+                const lastSavedUser = await AdminUser.findOne().sort({ createdAt: -1 });
+                let newAdminId = lastSavedUser ? parseInt(lastSavedUser.admin_id.slice(3)) + 1 : 1;
+                user.admin_id = 'QC_' + newAdminId;
+                user = await user.save();
+                return res.status(201).json(user);
+            }
+            return res.status(200).json(user);  
+        } catch (error) {
+            return next(error);
         }
-        return res.status(200).json(user);
     },
 };
 
