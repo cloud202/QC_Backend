@@ -12,6 +12,7 @@ const projectTemplateController2 = require('../controller/adminController/master
 const teckStackController = require('../controller/adminController/masterController/teckStackController');
 const adminUserController = require('../controller/adminController/masterController/adminUserController');
 const workloadTypeController = require('../controller/adminController/masterController/workloadTypeController');
+const clientPreferenceController = require('../controller/adminController/ClientControllers/clientPreferenceController')
 
 //Routes for CRUD Operations in Project Type
 router.post('/api/admin/master/project_type', projectTypeController.storeType)   //to add project_type
@@ -81,12 +82,12 @@ router.delete('/api/admin/master/v2/project_template/:id', projectTemplateContro
 router.patch('/api/admin/master/v2/project_template/:id', projectTemplateController2.updateTemplateById);
 
 //routes for CRUD operations for admin user
-router.post('/api/admin/user',adminUserController.storeUser);
-router.get('/api/admin/user',adminUserController.getAllUsers);
-router.get('/api/admin/user/:id',adminUserController.getUserById);
-router.patch('/api/admin/user/:id',adminUserController.updateUser);
-router.delete('/api/admin/user/:id',adminUserController.deleteUser);
-router.get('/api/admin/user/email/:email',adminUserController.getUserByEmail);
+router.post('/api/admin/user', adminUserController.storeUser);
+router.get('/api/admin/user', adminUserController.getAllUsers);
+router.get('/api/admin/user/:id', adminUserController.getUserById);
+router.patch('/api/admin/user/:id', adminUserController.updateUser);
+router.delete('/api/admin/user/:id', adminUserController.deleteUser);
+router.get('/api/admin/user/email/:email', adminUserController.getUserByEmail);
 
 //routes for CRUD operations for teck stack
 router.post('/api/admin/master/teck_stack', teckStackController.storeTeckStack);
@@ -101,5 +102,9 @@ router.get('/api/admin/master/workload_type', workloadTypeController.getAllWorkl
 router.get('/api/admin/master/workload_type/:id', workloadTypeController.getWorkloadTypeById);
 router.patch('/api/admin/master/workload_type/:id', workloadTypeController.updateWorkloadType);
 router.delete('/api/admin/master/workload_type/:id', workloadTypeController.deleteWorkloadType);
+
+//route for project template  by Customer Preferences
+router.get('/api/admin/client/template_preferences', clientPreferenceController.searchKeywordsInMultipleCollections);
+router.get('/api/admin/client/template_preferences/indtype', clientPreferenceController.getFilteredTemplates);
 
 module.exports = router;
