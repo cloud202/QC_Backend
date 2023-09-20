@@ -2,6 +2,7 @@ const { MongoClient } = require('mongodb');
 const ProjectIndustry = require('../../../models/admin/master/projectIndustry');
 const ProjectType = require('../../../models/admin/master/projectType');
 const projectTemplate2 = require('../../../models/admin/master/projectTemplate2');
+const CustomErrorHandler = require('../../../services/CustomErrorHandler')
 
 const clientPreferenceController = {
     async searchKeywordsInMultipleCollections(req, res, next) {
@@ -60,6 +61,80 @@ const clientPreferenceController = {
                 ]
             });
             return res.status(200).json(templates);
+        } catch (error) {
+            return next(error);
+        }
+    },
+
+    async getTemplatePhases(req, res, next) {
+        try {
+            const templateId = req.params.id;
+            const template = await projectTemplate2.findById(templateId).select('phasesId').populate('phases.phasesId');
+            if (!template) {
+                return next(CustomErrorHandler.notFound('Template not found'));
+            }
+            const processedPhases = {};
+            const phases = template.phases.reduce((result, phase) => {
+                const key = phase.phasesId._id;
+                if (key in processedPhases === false) {
+                    processedPhases[key] = key;
+                    result.push(phase);
+                }
+                return result;
+            }, []);
+            return res.status(200).json(phases);
+        } catch (error) {
+            return next(error);
+        }
+    },
+
+    async getTemplateModules(req, res, next) {
+        try {
+            const templateId = req.params.id;
+            const template = await projectTemplate2.findById(templateId).select('moduleId').populate('phases.modules.moduleId');
+            if (!template) {
+                return next(CustomErrorHandler.notFound('Template not found'));
+            }
+            const processedModules = {};
+            const modules = template.phases.reduce((result, phase) => {
+                const newModules = phase.modules.reduce((result, module) => {
+                    const key = module.moduleId._id;
+                    if (key in processedModules === false) {
+                        processedModules[key] = key;
+                        result.push(module);
+                    }
+                    return result;
+                }, []);
+                result.push(...newModules);
+                return result;
+            }, []);
+            return res.status(200).json(modules);
+        } catch (error) {
+            return next(error);
+        }
+    },
+
+    async getTemplateTasks(req, res, next) {
+        try {
+            const templateId = req.params.id;
+            const template = await projectTemplate2.findById(templateId).select('taskId').populate('phases.modules.tasks.taskId');
+            if (!template) {
+                return next(CustomErrorHandler.notFound('Template not found'));
+            }
+            const processedTasks = {};
+            const result = [];
+            template.phases.forEach(phase => {
+                phase.modules.forEach(module => {
+                    module.tasks.forEach(task => {
+                        const key = task.taskId._id;
+                        if (key in processedTasks === false) {
+                            processedTasks[key] = key;
+                            result.push(task);
+                        }
+                    });
+                })
+            })
+            return res.status(200).json(result);
         } catch (error) {
             return next(error);
         }
