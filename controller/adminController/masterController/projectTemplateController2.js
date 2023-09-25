@@ -53,11 +53,9 @@ const projectTemplateController2 = {
             }, {
                 path: 'template_segments.segment_id',
                 model: 'ProjectSegment',
-                select: ['name']
             }, {
                 path: 'template_industries.industry_id',
                 model: 'ProjectIndustry',
-                select: ['name']
             }, {
                 path: 'phases.phasesId',
                 model: 'ProjectPhase'
@@ -71,7 +69,7 @@ const projectTemplateController2 = {
                     path: 'task_solutionid',
                     model: 'ProjectSolution'
                 }
-            }]);
+            }]).select('-_id');
             if (!template) {
                 return next(CustomErrorHandler.notFound('Template not found'));
             }
