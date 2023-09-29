@@ -49,7 +49,7 @@ const clientPreferenceController = {
             results = results.map(results => results._id);
             console.log(results);
             const templates = await projectTemplate2.find({
-                $or: [
+                $and: [
                     { template_type_id: { $in: results } },
                     {
                         template_industries: {
@@ -78,7 +78,7 @@ const clientPreferenceController = {
                 const key = phase.phasesId._id;
                 if (key in processedPhases === false) {
                     processedPhases[key] = key;
-                    result.push(phase);
+                    result.push(phase.phasesId);
                 }
                 return result;
             }, []);
@@ -101,7 +101,7 @@ const clientPreferenceController = {
                     const key = module.moduleId._id;
                     if (key in processedModules === false) {
                         processedModules[key] = key;
-                        result.push(module);
+                        result.push(module.moduleId);
                     }
                     return result;
                 }, []);
@@ -129,7 +129,7 @@ const clientPreferenceController = {
                         const key = task.taskId._id;
                         if (key in processedTasks === false) {
                             processedTasks[key] = key;
-                            result.push(task);
+                            result.push(task.taskId);
                         }
                     });
                 })
