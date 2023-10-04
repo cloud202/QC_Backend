@@ -4,62 +4,94 @@ const ProjectType = require('../../../models/admin/master/projectType');
 const projectTemplate2 = require('../../../models/admin/master/projectTemplate2');
 const CustomErrorHandler = require('../../../services/CustomErrorHandler')
 
-const clientPreferenceController = {
-    async searchKeywordsInMultipleCollections(req, res, next) {
-        const uri = 'mongodb://localhost:27017'; // MongoDB connection string
-        const dbName = 'test'; // Your database name
-        const collectionsToSearch = ['phases', 'modules', 'tasks']; // Array of collection names
-        const fieldsToSearch = ['name', 'description', 'task_actionName']; // Array of keys (fields) to search within
-        const keywordsToSearch = ['Migration', 'Modernization', 'Greenfield']; // Array of keywords to search for
-
-        const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-        try {
-            await client.connect();
-            const db = client.db(dbName);
-            const results = [];
-            for (const collectionName of collectionsToSearch) {
-                const collection = db.collection(collectionName);
-                for (const field of fieldsToSearch) {
-                    for (const keyword of keywordsToSearch) {
-                        const regexPattern = new RegExp(keyword, 'i'); // Case-insensitive search
-                        const query = {};
-                        query[field] = { $regex: regexPattern };
-                        const cursor = collection.find(query);
-                        await cursor.forEach(document => {
+async function searchKeywordsInMultipleCollections(keywordsToSearch) {
+    const uri = 'mongodb://localhost:27017';
+    const dbName = 'test';
+    const collectionsToSearch = ['phases', 'modules', 'templates2'];
+    const fieldsToSearch = ['name', 'description', 'scope', 'template_usecase', 'template_name'];
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    try {
+        await client.connect();
+        const db = client.db(dbName);
+        const results = [];
+        for (const collectionName of collectionsToSearch) {
+            const collection = db.collection(collectionName);
+            for (const field of fieldsToSearch) {
+                for (const keyword of keywordsToSearch) {
+                    const regexPattern = new RegExp(keyword, 'i');
+                    const query = {};
+                    query[field] = { $regex: regexPattern };
+                    const cursor = collection.find(query);
+                    await cursor.forEach(document => {
+                        if (!results.includes(document)) {
                             results.push(document._id);
-                        });
-                    }
+                        }
+                    });
                 }
             }
-            res.status(200).json(results);
-        } catch (error) {
-            return next(error);
-        } finally {
-            await client.close();
         }
-    },
+        return results;
+    } catch (error) {
+        return next(error);
+    } finally {
+        await client.close();
+    }
+}
+
+const clientPreferenceController = {
 
     async getFilteredTemplates(req, res, next) {
         try {
-            const industryId = req.body.industry_id;
-            const type_id = req.body.type_id;
+            const industryId = req.body.industryId;
+            const typeId = req.body.typeId;
+            const techStacks = req.body.techStacks;
+            const workloadTypes = req.body.workloadTypes;
             let results = await ProjectIndustry.find({ _id: industryId }).select('_id');
-            results.push(...await ProjectType.find({ _id: type_id }).select('_id'));
+            results.push(...await ProjectType.find({ _id: typeId }).select('_id'));
             results = results.map(results => results._id);
-            console.log(results);
-            const templates = await projectTemplate2.find({
-                $and: [
-                    { template_type_id: { $in: results } },
-                    {
-                        template_industries: {
-                            $elemMatch: {
-                                industry_id: { $in: results },
+            const searchIds = await searchKeywordsInMultipleCollections([...techStacks, ...workloadTypes]); 
+            const aggregationPipeline = [
+                {
+                    $match: {
+                        $and: [
+                            { template_type_id: { $in: results } },
+                            {
+                                template_industries: {
+                                    $elemMatch: {
+                                        industry_id: { $in: results },
+                                    }
+                                }
                             }
-                        }
+                        ]
                     }
-                ]
-            });
+                }
+            ];
+            if (searchIds.length > 0) {
+                aggregationPipeline.push({
+                    $match: {
+                        $or: [
+                            {
+                                "phases": {
+                                    $elemMatch: {
+                                        phasesId: { $in: searchIds },
+                                    }
+                                }
+                            },
+                            {
+                                "phases.modules": {
+                                    $elemMatch: {
+                                        moduleId: { $in: searchIds },
+                                    }
+                                }
+                            },
+                            {
+                                "_id":{ $in: searchIds }
+                            }
+                        ]
+                    }
+                });
+            }
+            const templates = await projectTemplate2.aggregate(aggregationPipeline);
             return res.status(200).json(templates);
         } catch (error) {
             return next(error);

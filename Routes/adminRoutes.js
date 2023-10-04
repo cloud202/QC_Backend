@@ -104,10 +104,9 @@ router.patch('/api/admin/master/workload_type/:id', workloadTypeController.updat
 router.delete('/api/admin/master/workload_type/:id', workloadTypeController.deleteWorkloadType);
 
 //route for project template  by Customer Preferences
-router.get('/api/admin/client/template_preferences', clientPreferenceController.searchKeywordsInMultipleCollections);
 router.get('/api/admin/client/template_preferences/template_phases/:id', clientPreferenceController.getTemplatePhases); // get all phases inside template by template_id
 router.get('/api/admin/client/template_preferences/template_modules/:id', clientPreferenceController.getTemplateModules);// get all modules inside template by template_id
 router.get('/api/admin/client/template_preferences/template_tasks/:id', clientPreferenceController.getTemplateTasks);// get all tasks inside template by template_id
-router.post('/api/admin/client/template_preferences/indtype', clientPreferenceController.getFilteredTemplates);
+router.post('/api/admin/client/template_preferences', clientPreferenceController.getFilteredTemplates);
 
 module.exports = router;
