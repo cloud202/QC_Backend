@@ -30,7 +30,11 @@ const taskSchema = new Schema({
     },
     task_script: {
         type: String,
+    },
+    playbook: {
+        type: [String],
+        required: false,
     }
-},{ timestamps: true })
+}, { timestamps: true })
 
 module.exports = mongoose.model('ProjectTask', taskSchema, 'tasks');
