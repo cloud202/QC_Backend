@@ -6,6 +6,7 @@ const masterTaskSchema = Joi.object({
     name: Joi.string().required(),
     task_admin_id: Joi.string(),
     task_type: Joi.string().required(),
+    status: Joi.boolean().required(),
     task_solutionid: Joi.objectId().allow(''),
     task_actionName: Joi.string().allow(''),
     task_script: Joi.string().allow(''),
