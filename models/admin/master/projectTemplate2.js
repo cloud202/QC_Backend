@@ -48,7 +48,13 @@ const templateSchema = new Schema({
                 }
             }]
         }]
-    }]
+    }],
+    links: [{
+        sales: [String],
+        funding: [String],
+        delivery: [String],
+        operations: [String],
+    }],
 }, { timestamps: true });
 
 module.exports = mongoose.model('ProjectTemplate2', templateSchema, 'templates2');

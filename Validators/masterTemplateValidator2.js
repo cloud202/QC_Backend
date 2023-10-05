@@ -16,6 +16,13 @@ const phasesSchema = Joi.object({
     modules: Joi.array().items(modulesSchema).min(1)
 });
 
+const linksSchema = Joi.object({
+    sales: Joi.array().items(Joi.string()),
+    funding: Joi.array().items(Joi.string()),
+    delivery: Joi.array().items(Joi.string()),
+    operations: Joi.array().items(Joi.string()),
+});
+
 const masterTemplateSchema = Joi.object({
     template_name: Joi.string().required(),
     template_type_id: Joi.objectId().required(),
@@ -26,7 +33,8 @@ const masterTemplateSchema = Joi.object({
         industry_id: Joi.objectId().required()
     })).min(1),
     template_usecase: Joi.string().allow(''),
-    phases: Joi.array().items(phasesSchema).min(1)
+    phases: Joi.array().items(phasesSchema).min(1),
+    links: Joi.array().items(linksSchema)
 });
 
 module.exports = masterTemplateSchema;
