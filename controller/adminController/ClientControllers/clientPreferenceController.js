@@ -5,7 +5,7 @@ const projectTemplate2 = require('../../../models/admin/master/projectTemplate2'
 const CustomErrorHandler = require('../../../services/CustomErrorHandler')
 
 async function searchKeywordsInMultipleCollections(keywordsToSearch) {
-    const uri = 'mongodb://localhost:27017';
+    const uri = process.env.DB_LINK
     const dbName = 'test';
     const collectionsToSearch = ['phases', 'modules', 'templates2'];
     const fieldsToSearch = ['name', 'description', 'scope', 'template_usecase', 'template_name'];
@@ -13,7 +13,7 @@ async function searchKeywordsInMultipleCollections(keywordsToSearch) {
     try {
         await client.connect();
         const db = client.db(dbName);
-        const results = [];
+        const results = new Set();
         for (const collectionName of collectionsToSearch) {
             const collection = db.collection(collectionName);
             for (const field of fieldsToSearch) {
@@ -23,14 +23,12 @@ async function searchKeywordsInMultipleCollections(keywordsToSearch) {
                     query[field] = { $regex: regexPattern };
                     const cursor = collection.find(query);
                     await cursor.forEach(document => {
-                        if (!results.includes(document)) {
-                            results.push(document._id);
-                        }
+                        results.add(document._id);
                     });
                 }
             }
         }
-        return results;
+        return Array.from(results);
     } catch (error) {
         return next(error);
     } finally {
