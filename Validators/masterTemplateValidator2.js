@@ -34,7 +34,7 @@ const masterTemplateSchema = Joi.object({
     })).min(1),
     template_usecase: Joi.string().allow(''),
     phases: Joi.array().items(phasesSchema).min(1),
-    links: Joi.array().items(linksSchema)
+    links: linksSchema
 });
 
 module.exports = masterTemplateSchema;
