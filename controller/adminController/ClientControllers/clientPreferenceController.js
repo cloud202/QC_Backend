@@ -47,6 +47,7 @@ const clientPreferenceController = {
             let results = await ProjectIndustry.find({ _id: industryId }).select('_id');
             results.push(...await ProjectType.find({ _id: typeId }).select('_id'));
             results = results.map(results => results._id);
+            console.log(results);
             const searchIds = await searchKeywordsInMultipleCollections([...techStacks, ...workloadTypes]);
             const aggregationPipeline = [
                 // {
@@ -94,7 +95,15 @@ const clientPreferenceController = {
                         moduleMatchScore: { $size: { $setIntersection: ["$phases.modules.moduleId", searchIds] } },
                         projectMatchScore: { $cond: { if: { $in: ["$_id", searchIds] }, then: 1, else: 0 } },
                         //for demo purposes only
-                        industryMatchScore: { $size: { $setIntersection: ["$template_industries", results] } },
+                        industryMatchScore: {
+                            $size: {
+                                $filter: {
+                                    input: "$template_industries",
+                                    as: "industry",
+                                    cond: { $in: ["$$industry.industry_id", results] }
+                                }
+                            }
+                        },
                         typeMatchScore: { $cond: { if: { $in: ["$template_type_id", results] }, then: 1, else: 0 } },
                     }
                 });
