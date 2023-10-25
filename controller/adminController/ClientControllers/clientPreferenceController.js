@@ -93,12 +93,15 @@ const clientPreferenceController = {
                         phaseMatchScore: { $size: { $setIntersection: ["$phases.phasesId", searchIds] } },
                         moduleMatchScore: { $size: { $setIntersection: ["$phases.modules.moduleId", searchIds] } },
                         projectMatchScore: { $cond: { if: { $in: ["$_id", searchIds] }, then: 1, else: 0 } },
+                        //for demo purposes only
+                        industryMatchScore: { $size: { $setIntersection: ["$template_industries", results] } },
+                        typeMatchScore: { $cond: { if: { $in: ["$template_type_id", results] }, then: 1, else: 0 } },
                     }
                 });
                 aggregationPipeline.push({
                     $addFields: {
                         totalMatchScore: {
-                            $add: ["$phaseMatchScore", "$moduleMatchScore", "$projectMatchScore"]
+                            $add: ["$phaseMatchScore", "$moduleMatchScore", "$projectMatchScore", "$industryMatchScore", "$typeMatchScore"]
                         }
                     }
                 });
