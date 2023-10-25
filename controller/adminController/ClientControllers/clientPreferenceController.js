@@ -49,45 +49,45 @@ const clientPreferenceController = {
             results = results.map(results => results._id);
             const searchIds = await searchKeywordsInMultipleCollections([...techStacks, ...workloadTypes]);
             const aggregationPipeline = [
-                {
-                    $match: {
-                        $and: [
-                            { template_type_id: { $in: results } },
-                            {
-                                template_industries: {
-                                    $elemMatch: {
-                                        industry_id: { $in: results },
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
+                // {
+                //     $match: {
+                //         $and: [
+                //             { template_type_id: { $in: results } },
+                //             {
+                //                 template_industries: {
+                //                     $elemMatch: {
+                //                         industry_id: { $in: results },
+                //                     }
+                //                 }
+                //             }
+                //         ]
+                //     }
+                // }
             ];
-            if (searchIds.length > 0) {
-                aggregationPipeline.push({
-                    $match: {
-                        $or: [
-                            {
-                                "phases": {
-                                    $elemMatch: {
-                                        phasesId: { $in: searchIds },
-                                    }
-                                }
-                            },
-                            {
-                                "phases.modules": {
-                                    $elemMatch: {
-                                        moduleId: { $in: searchIds },
-                                    }
-                                }
-                            },
-                            {
-                                "_id": { $in: searchIds }
-                            }
-                        ]
-                    }
-                });
+            if (searchIds.length > 0 || true) {
+                // aggregationPipeline.push({
+                //     $match: {
+                //         $or: [
+                //             {
+                //                 "phases": {
+                //                     $elemMatch: {
+                //                         phasesId: { $in: searchIds },
+                //                     }
+                //                 }
+                //             },
+                //             {
+                //                 "phases.modules": {
+                //                     $elemMatch: {
+                //                         moduleId: { $in: searchIds },
+                //                     }
+                //                 }
+                //             },
+                //             {
+                //                 "_id": { $in: searchIds }
+                //             }
+                //         ]
+                //     }
+                // });
                 aggregationPipeline.push({
                     $addFields: {
                         phaseMatchScore: { $size: { $setIntersection: ["$phases.phasesId", searchIds] } },
